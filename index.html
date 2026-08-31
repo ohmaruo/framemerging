@@ -94,8 +94,13 @@
     </div>
 
     <div class="preview-container">
-      <p class="sub-text">👇 上下左右ドラッグ・スライドで調整</p>
+      <p class="sub-text">👇 移動・ピンチ操作（または下で拡大倍率変更）</p>
       <canvas id="canvas" width="400" height="400"></canvas>
+      <div class="control-group" style="margin-top: 10px;">
+        <label style="min-width: 60px;">拡大倍率</label>
+        <input type="range" id="zoom-range" min="0.2" max="3.0" step="0.05" value="1.0">
+        <span id="zoom-val" style="min-width: 40px; font-weight: bold;">100%</span>
+      </div>
     </div>
 
     <div class="section">
@@ -136,6 +141,8 @@
     const downloadBtn = document.getElementById('download-btn');
     const qualityRange = document.getElementById('quality-range');
     const qualityVal = document.getElementById('quality-val');
+    const zoomRange = document.getElementById('zoom-range');
+    const zoomVal = document.getElementById('zoom-val');
     const sizeOption = document.getElementById('size-option');
     const formatOption = document.getElementById('format-option');
     const canvas = document.getElementById('canvas');
@@ -146,14 +153,22 @@
     let targetSlotIndex = null;
     let imgOffsetX = 0;
     let imgOffsetY = 0;
+    let imgScale = 1.0;
     let isDragging = false;
     let startX = 0;
     let startY = 0;
+    let touchDistance = null;
 
     renderSlots();
 
     qualityRange.addEventListener('input', (e) => {
       qualityVal.textContent = Math.round(e.target.value * 100) + '%';
+    });
+
+    zoomRange.addEventListener('input', (e) => {
+      imgScale = parseFloat(e.target.value);
+      zoomVal.textContent = Math.round(imgScale * 100) + '%';
+      renderCanvas();
     });
 
     triggerMultiBtn.addEventListener('click', () => {
@@ -167,8 +182,18 @@
       return { x: e.clientX, y: e.clientY };
     };
 
+    const getTouchDistance = (e) => {
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      return Math.sqrt(dx * dx + dy * dy);
+    };
+
     const startDrag = (e) => {
       if (!baseImage) return;
+      if (e.touches && e.touches.length === 2) {
+        touchDistance = getTouchDistance(e);
+        return;
+      }
       isDragging = true;
       const pos = getPos(e);
       startX = pos.x - imgOffsetX;
@@ -176,6 +201,20 @@
     };
 
     const moveDrag = (e) => {
+      if (!baseImage) return;
+      if (e.touches && e.touches.length === 2) {
+        const newDist = getTouchDistance(e);
+        if (touchDistance) {
+          const factor = newDist / touchDistance;
+          imgScale = Math.min(Math.max(imgScale * factor, 0.2), 3.0);
+          zoomRange.value = imgScale;
+          zoomVal.textContent = Math.round(imgScale * 100) + '%';
+          renderCanvas();
+        }
+        touchDistance = newDist;
+        return;
+      }
+
       if (!isDragging) return;
       const pos = getPos(e);
       imgOffsetX = pos.x - startX;
@@ -183,7 +222,10 @@
       renderCanvas();
     };
 
-    const endDrag = () => { isDragging = false; };
+    const endDrag = () => { 
+      isDragging = false; 
+      touchDistance = null;
+    };
 
     canvas.addEventListener('mousedown', startDrag);
     window.addEventListener('mousemove', moveDrag);
@@ -192,6 +234,17 @@
     canvas.addEventListener('touchstart', startDrag, { passive: true });
     window.addEventListener('touchmove', moveDrag, { passive: true });
     window.addEventListener('touchend', endDrag);
+
+    // PCのマウスホイールによるズーム対応
+    canvas.addEventListener('wheel', (e) => {
+      if (!baseImage) return;
+      e.preventDefault();
+      const zoomFactor = e.deltaY < 0 ? 1.05 : 0.95;
+      imgScale = Math.min(Math.max(imgScale * zoomFactor, 0.2), 3.0);
+      zoomRange.value = imgScale;
+      zoomVal.textContent = Math.round(imgScale * 100) + '%';
+      renderCanvas();
+    }, { passive: false });
 
     uploadFrameInput.addEventListener('change', async (e) => {
       const files = Array.from(e.target.files);
@@ -283,6 +336,9 @@
         baseImage = img;
         imgOffsetX = 0;
         imgOffsetY = 0;
+        imgScale = 1.0;
+        zoomRange.value = 1.0;
+        zoomVal.textContent = '100%';
         renderCanvas();
       });
     });
@@ -304,11 +360,13 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       if (baseImage) {
-        const scale = canvas.height / baseImage.height;
-        const drawWidth = baseImage.width * scale;
-        const drawHeight = canvas.height;
+        const baseAspectScale = canvas.height / baseImage.height;
+        const drawWidth = baseImage.width * baseAspectScale * imgScale;
+        const drawHeight = canvas.height * imgScale;
+        
         const drawX = (canvas.width - drawWidth) / 2 + imgOffsetX;
-        const drawY = imgOffsetY;
+        const drawY = (canvas.height - drawHeight) / 2 + imgOffsetY;
+        
         ctx.drawImage(baseImage, drawX, drawY, drawWidth, drawHeight);
       }
 
