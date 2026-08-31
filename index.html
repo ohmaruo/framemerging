@@ -15,10 +15,10 @@
     }
 
     body {
-      font-family: "Hiragino Sans", "Meiryo", sans-serif;
-      max-width: 500px; /* スマホ向け縦長レイアウト */
-      margin: 20px auto;
-      padding: 0 12px;
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif;
+      max-width: 500px;
+      margin: 10px auto;
+      padding: 0 10px;
       background-color: var(--bg-color);
       color: var(--text-color);
     }
@@ -26,165 +26,48 @@
     .card {
       background: var(--card-bg);
       border-radius: 20px;
-      padding: 20px;
-      box-shadow: 0 8px 24px rgba(255, 182, 193, 0.2);
+      padding: 16px;
+      box-shadow: 0 4px 16px rgba(255, 182, 193, 0.2);
       border: 2px solid var(--border-color);
     }
 
-    h1 {
-      text-align: center;
-      font-size: 1.4em;
-      margin: 0 0 20px 0;
-      color: var(--accent-pink);
-    }
-
-    .section {
-      margin-bottom: 20px;
-      background: #fff;
-      border: 1.5px solid var(--border-color);
-      border-radius: 14px;
-      padding: 14px;
-    }
-
-    h3 {
-      margin-top: 0;
-      font-size: 0.95em;
-      color: var(--accent-pink);
-    }
-
-    .sub-text {
-      font-size: 0.75em;
-      color: #948288;
-      margin-top: -6px;
-      margin-bottom: 10px;
-    }
+    h1 { text-align: center; font-size: 1.3em; margin: 0 0 15px 0; color: var(--accent-pink); }
+    .section { margin-bottom: 15px; background: #fff; border: 1.5px solid var(--border-color); border-radius: 14px; padding: 12px; }
+    h3 { margin-top: 0; font-size: 0.9em; color: var(--accent-pink); }
+    .sub-text { font-size: 0.75em; color: #948288; margin-top: -4px; margin-bottom: 8px; }
 
     .file-btn {
-      background: var(--soft-pink);
-      color: var(--accent-pink);
-      border: 1.5px dashed var(--accent-pink);
-      padding: 8px 14px;
-      border-radius: 20px;
-      cursor: pointer;
-      display: inline-block;
-      font-size: 0.8em;
-      font-weight: bold;
+      background: var(--soft-pink); color: var(--accent-pink); border: 1.5px dashed var(--accent-pink);
+      padding: 10px 16px; border-radius: 20px; cursor: pointer; display: inline-block; font-size: 0.85em; font-weight: bold;
+      text-align: center; width: calc(100% - 32px);
     }
 
-    .frame-slots {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 10px;
-      justify-content: center;
-    }
-
+    .frame-slots { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; justify-content: center; }
     .frame-slot {
-      width: 68px;
-      height: 68px;
-      border: 2px dashed var(--border-color);
-      border-radius: 12px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      position: relative;
-      background: var(--bg-color);
-      overflow: hidden;
+      width: 60px; height: 60px; border: 2px dashed var(--border-color); border-radius: 10px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      cursor: pointer; position: relative; background: var(--bg-color); overflow: hidden;
     }
-
-    .frame-slot.active {
-      border: 2.5px solid var(--accent-pink);
-      background: var(--soft-pink);
-    }
-
-    .frame-slot img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-
-    .frame-slot .slot-label {
-      font-size: 0.7em;
-      color: #b39aa2;
-      text-align: center;
-    }
-
+    .frame-slot.active { border: 2.5px solid var(--accent-pink); background: var(--soft-pink); }
+    .frame-slot img { width: 100%; height: 100%; object-fit: contain; }
+    .frame-slot .slot-label { font-size: 0.65em; color: #b39aa2; text-align: center; }
     .frame-slot .remove-btn {
-      position: absolute;
-      top: 2px;
-      right: 2px;
-      background: #ff4d6d;
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 18px;
-      height: 18px;
-      font-size: 10px;
-      cursor: pointer;
+      position: absolute; top: 2px; right: 2px; background: #ff4d6d; color: white;
+      border: none; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; cursor: pointer;
     }
 
-    /* プレビュー表示 */
-    .preview-container {
-      text-align: center;
-      margin: 15px 0;
-      padding: 10px;
-      background: var(--bg-color);
-      border-radius: 16px;
-      border: 2px solid var(--border-color);
-      position: relative;
-    }
+    .preview-container { text-align: center; margin: 10px 0; padding: 8px; background: var(--bg-color); border-radius: 14px; border: 2px solid var(--border-color); }
+    canvas { max-width: 100%; height: auto; border-radius: 10px; background: #fff; touch-action: none; }
 
-    canvas {
-      max-width: 100%;
-      border-radius: 10px;
-      background: #fff;
-      cursor: grab;
-      touch-action: none; /* スマホのスクロール干渉防止 */
-    }
-
-    canvas:active {
-      cursor: grabbing;
-    }
-
-    .control-group {
-      margin: 10px 0;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.85em;
-    }
-
-    label {
-      min-width: 90px;
-      font-weight: bold;
-    }
-
-    select {
-      padding: 5px 10px;
-      border-radius: 8px;
-      border: 1.5px solid var(--border-color);
-      outline: none;
-      background: white;
-    }
-
-    input[type="range"] {
-      flex: 1;
-      accent-color: var(--accent-pink);
-    }
+    .control-group { margin: 8px 0; display: flex; align-items: center; gap: 6px; font-size: 0.8em; }
+    label { min-width: 80px; font-weight: bold; }
+    select { padding: 4px 8px; border-radius: 8px; border: 1.5px solid var(--border-color); background: white; font-size: 0.9em; }
+    input[type="range"] { flex: 1; accent-color: var(--accent-pink); }
 
     .save-btn {
-      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-      color: #fff;
-      border: none;
-      padding: 14px 20px;
-      font-size: 1em;
-      border-radius: 25px;
-      cursor: pointer;
-      width: 100%;
-      font-weight: bold;
-      box-shadow: 0 4px 15px rgba(255, 133, 162, 0.4);
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); color: #fff; border: none;
+      padding: 12px 16px; font-size: 0.95em; border-radius: 25px; cursor: pointer; width: 100%; font-weight: bold;
+      box-shadow: 0 4px 12px rgba(255, 133, 162, 0.4); margin-top: 10px;
     }
   </style>
 </head>
@@ -193,51 +76,43 @@
   <div class="card">
     <h1>🐶 フレーム合成＆保存 🐶</h1>
 
-    <!-- 1. フレーム素材 -->
     <div class="section">
       <h3>🐶 1. フレーム素材（最大5個）</h3>
-      <p class="sub-text">画像をアップロードして重ね掛けできます</p>
+      <p class="sub-text">※端末の画像選択画面で画像を複数選んでください</p>
       
-      <label class="file-btn">
+      <button type="button" class="file-btn" id="trigger-multi-upload">
         🐶 まとめてフレーム追加
-        <input type="file" id="upload-frame" accept="image/png,image/svg+xml" multiple style="display:none;">
-      </label>
+      </button>
+      <input type="file" id="upload-frame" accept="image/*" multiple style="display:none;">
 
       <div class="frame-slots" id="frame-slots"></div>
     </div>
 
-    <!-- 2. メイン画像 -->
     <div class="section">
       <h3>🐶 2. メイン画像をアップロード</h3>
-      <input type="file" id="upload-image" accept="image/*" style="font-size:0.85em;">
+      <input type="file" id="upload-image" accept="image/*" style="font-size:0.8em; width: 100%;">
     </div>
 
-    <!-- プレビュー -->
     <div class="preview-container">
-      <p class="sub-text" style="margin-bottom:6px;">👇 画像を左右にドラッグして位置調整できます</p>
+      <p class="sub-text">👇 左右ドラッグ・スライドで調整</p>
       <canvas id="canvas" width="400" height="400"></canvas>
     </div>
 
-    <!-- 3. サイズ・調整 & 保存 -->
     <div class="section">
       <h3>🐶 3. サイズ・品質調整 ＆ 保存</h3>
-      
       <div class="control-group">
         <label>長辺サイズ</label>
         <select id="size-option">
-          <option value="original">元のサイズを維持</option>
           <option value="1200">最大 1200px</option>
           <option value="800" selected>最大 800px</option>
           <option value="500">最大 500px</option>
         </select>
       </div>
-
       <div class="control-group">
         <label>画像品質</label>
         <input type="range" id="quality-range" min="0.1" max="1.0" step="0.05" value="0.85">
-        <span id="quality-val" style="min-width:35px;">85%</span>
+        <span id="quality-val">85%</span>
       </div>
-
       <div class="control-group">
         <label>保存形式</label>
         <select id="format-option">
@@ -250,11 +125,12 @@
     <button class="save-btn" id="download-btn">🐶 画像を合成して保存する</button>
   </div>
 
-  <input type="file" id="single-frame-input" accept="image/png,image/svg+xml" style="display:none;">
+  <input type="file" id="single-frame-input" accept="image/*" style="display:none;">
 
   <script>
     const uploadImageInput = document.getElementById('upload-image');
     const uploadFrameInput = document.getElementById('upload-frame');
+    const triggerMultiBtn = document.getElementById('trigger-multi-upload');
     const singleFrameInput = document.getElementById('single-frame-input');
     const frameSlotsContainer = document.getElementById('frame-slots');
     const downloadBtn = document.getElementById('download-btn');
@@ -268,8 +144,6 @@
     let baseImage = null;
     let slots = Array(5).fill(null).map((_, i) => ({ id: i + 1, img: null, active: false }));
     let targetSlotIndex = null;
-
-    // 画像位置調整用変数
     let imgOffsetX = 0;
     let isDragging = false;
     let startX = 0;
@@ -280,42 +154,54 @@
       qualityVal.textContent = Math.round(e.target.value * 100) + '%';
     });
 
-    // ドラッグ＆タッチ操作（左右位置調整）
-    const startDrag = (x) => {
+    // 「まとめて追加」ボタンの確実な起動
+    triggerMultiBtn.addEventListener('click', () => {
+      uploadFrameInput.click();
+    });
+
+    const getX = (e) => e.touches ? e.touches[0].clientX : e.clientX;
+
+    const startDrag = (e) => {
       if (!baseImage) return;
       isDragging = true;
-      startX = x - imgOffsetX;
+      startX = getX(e) - imgOffsetX;
     };
 
-    const moveDrag = (x) => {
+    const moveDrag = (e) => {
       if (!isDragging) return;
-      imgOffsetX = x - startX;
+      imgOffsetX = getX(e) - startX;
       renderCanvas();
     };
 
     const endDrag = () => { isDragging = false; };
 
-    canvas.addEventListener('mousedown', (e) => startDrag(e.clientX));
-    window.addEventListener('mousemove', (e) => moveDrag(e.clientX));
+    canvas.addEventListener('mousedown', startDrag);
+    window.addEventListener('mousemove', moveDrag);
     window.addEventListener('mouseup', endDrag);
 
-    canvas.addEventListener('touchstart', (e) => startDrag(e.touches[0].clientX));
-    window.addEventListener('touchmove', (e) => moveDrag(e.touches[0].clientX));
+    canvas.addEventListener('touchstart', startDrag, { passive: true });
+    window.addEventListener('touchmove', moveDrag, { passive: true });
     window.addEventListener('touchend', endDrag);
 
-    // フレーム読み込み
-    uploadFrameInput.addEventListener('change', (e) => {
+    // 複数フレーム読み込み処理の修正（Promiseで順番を保証）
+    uploadFrameInput.addEventListener('change', async (e) => {
       const files = Array.from(e.target.files);
-      files.forEach(file => {
+      
+      for (const file of files) {
         const emptySlot = slots.find(s => s.img === null);
-        if (!emptySlot) return;
-        loadImage(file, (img) => {
-          emptySlot.img = img;
-          emptySlot.active = true;
-          renderSlots();
-          renderCanvas();
+        if (!emptySlot) break; // 5個満タンなら終了
+
+        await new Promise((resolve) => {
+          loadImage(file, (img) => {
+            emptySlot.img = img;
+            emptySlot.active = true;
+            resolve();
+          });
         });
-      });
+      }
+
+      renderSlots();
+      renderCanvas();
       uploadFrameInput.value = '';
     });
 
@@ -377,7 +263,6 @@
             singleFrameInput.click();
           };
         }
-
         frameSlotsContainer.appendChild(div);
       });
     }
@@ -387,16 +272,14 @@
       if (!file) return;
       loadImage(file, (img) => {
         baseImage = img;
-        imgOffsetX = 0; // 位置リセット
+        imgOffsetX = 0;
         renderCanvas();
       });
     });
 
-    // キャンバス描画
     function renderCanvas() {
       const activeFrames = slots.filter(s => s.img && s.active);
 
-      // フレーム基準（アクティブな最初のフレームに合わせてキャンバスサイズを決定）
       if (activeFrames.length > 0) {
         canvas.width = activeFrames[0].img.width;
         canvas.height = activeFrames[0].img.height;
@@ -410,24 +293,18 @@
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // 1. ベース画像を左右調整付きで描画
       if (baseImage) {
-        // 高さ基準でアスペクト比を固定してフィットさせる
         const scale = canvas.height / baseImage.height;
         const drawWidth = baseImage.width * scale;
-        
-        // 描画位置（ドラッグ移動分を追加）
         const drawX = (canvas.width - drawWidth) / 2 + imgOffsetX;
         ctx.drawImage(baseImage, drawX, 0, drawWidth, canvas.height);
       }
 
-      // 2. フレームを上に描画（サイズ固定）
       activeFrames.forEach(slot => {
         ctx.drawImage(slot.img, 0, 0, canvas.width, canvas.height);
       });
     }
 
-    // 保存処理
     downloadBtn.addEventListener('click', () => {
       if (!baseImage) {
         alert('メイン画像をアップロードしてください。');
@@ -460,13 +337,18 @@
 
       const format = formatOption.value;
       const quality = parseFloat(qualityRange.value);
-      const dataUrl = exportCanvas.toDataURL(format, quality);
-
-      const ext = format === 'image/jpeg' ? 'jpg' : 'png';
-      const link = document.createElement('a');
-      link.download = `framed_image_${targetWidth}x${targetHeight}.${ext}`;
-      link.href = dataUrl;
-      link.click();
+      
+      try {
+        const dataUrl = exportCanvas.toDataURL(format, quality);
+        const link = document.createElement('a');
+        link.download = `framed_image.${format === 'image/jpeg' ? 'jpg' : 'png'}`;
+        link.href = dataUrl;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (e) {
+        alert('画像生成に失敗しました。');
+      }
     });
   </script>
 </body>
