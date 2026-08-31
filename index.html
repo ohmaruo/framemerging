@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>🐶 フレーム合成＆保存 🐶</title>
   <style>
     :root {
@@ -15,7 +15,7 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Meiryo", sans-serif;
       max-width: 500px;
       margin: 10px auto;
       padding: 0 10px;
@@ -94,7 +94,7 @@
     </div>
 
     <div class="preview-container">
-      <p class="sub-text">👇 左右ドラッグ・スライドで調整</p>
+      <p class="sub-text">👇 上下左右ドラッグ・スライドで調整</p>
       <canvas id="canvas" width="400" height="400"></canvas>
     </div>
 
@@ -145,8 +145,10 @@
     let slots = Array(5).fill(null).map((_, i) => ({ id: i + 1, img: null, active: false }));
     let targetSlotIndex = null;
     let imgOffsetX = 0;
+    let imgOffsetY = 0;
     let isDragging = false;
     let startX = 0;
+    let startY = 0;
 
     renderSlots();
 
@@ -154,22 +156,30 @@
       qualityVal.textContent = Math.round(e.target.value * 100) + '%';
     });
 
-    // 「まとめて追加」ボタンの確実な起動
     triggerMultiBtn.addEventListener('click', () => {
       uploadFrameInput.click();
     });
 
-    const getX = (e) => e.touches ? e.touches[0].clientX : e.clientX;
+    const getPos = (e) => {
+      if (e.touches && e.touches.length > 0) {
+        return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      }
+      return { x: e.clientX, y: e.clientY };
+    };
 
     const startDrag = (e) => {
       if (!baseImage) return;
       isDragging = true;
-      startX = getX(e) - imgOffsetX;
+      const pos = getPos(e);
+      startX = pos.x - imgOffsetX;
+      startY = pos.y - imgOffsetY;
     };
 
     const moveDrag = (e) => {
       if (!isDragging) return;
-      imgOffsetX = getX(e) - startX;
+      const pos = getPos(e);
+      imgOffsetX = pos.x - startX;
+      imgOffsetY = pos.y - startY;
       renderCanvas();
     };
 
@@ -183,13 +193,12 @@
     window.addEventListener('touchmove', moveDrag, { passive: true });
     window.addEventListener('touchend', endDrag);
 
-    // 複数フレーム読み込み処理の修正（Promiseで順番を保証）
     uploadFrameInput.addEventListener('change', async (e) => {
       const files = Array.from(e.target.files);
       
       for (const file of files) {
         const emptySlot = slots.find(s => s.img === null);
-        if (!emptySlot) break; // 5個満タンなら終了
+        if (!emptySlot) break;
 
         await new Promise((resolve) => {
           loadImage(file, (img) => {
@@ -273,6 +282,7 @@
       loadImage(file, (img) => {
         baseImage = img;
         imgOffsetX = 0;
+        imgOffsetY = 0;
         renderCanvas();
       });
     });
@@ -296,8 +306,10 @@
       if (baseImage) {
         const scale = canvas.height / baseImage.height;
         const drawWidth = baseImage.width * scale;
+        const drawHeight = canvas.height;
         const drawX = (canvas.width - drawWidth) / 2 + imgOffsetX;
-        ctx.drawImage(baseImage, drawX, 0, drawWidth, canvas.height);
+        const drawY = imgOffsetY;
+        ctx.drawImage(baseImage, drawX, drawY, drawWidth, drawHeight);
       }
 
       activeFrames.forEach(slot => {
