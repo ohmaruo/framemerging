@@ -69,6 +69,29 @@
       padding: 12px 16px; font-size: 0.95em; border-radius: 25px; cursor: pointer; width: 100%; font-weight: bold;
       box-shadow: 0 4px 12px rgba(255, 133, 162, 0.4); margin-top: 10px;
     }
+
+    /* 生成された画像表示エリア */
+    .result-modal {
+      display: none;
+      margin-top: 15px;
+      padding: 12px;
+      background: #fff;
+      border: 2px solid var(--accent-pink);
+      border-radius: 14px;
+      text-align: center;
+    }
+    .result-modal img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+    }
+    .result-title {
+      color: #ff4d6d;
+      font-weight: bold;
+      font-size: 0.9em;
+      margin-bottom: 6px;
+    }
   </style>
 </head>
 <body>
@@ -127,7 +150,14 @@
       </div>
     </div>
 
-    <button class="save-btn" id="download-btn">🐶 画像を合成して保存する</button>
+    <button class="save-btn" id="download-btn">🐶 画像を作成する</button>
+
+    <!-- 生成結果エリア -->
+    <div class="result-modal" id="result-modal">
+      <div class="result-title">✨ 画像が完成しました！ ✨</div>
+      <p class="sub-text">👇 下の画像を<b>長押し</b>して保存してください</p>
+      <img id="result-img" src="" alt="合成画像">
+    </div>
   </div>
 
   <input type="file" id="single-frame-input" accept="image/*" style="display:none;">
@@ -147,6 +177,8 @@
     const formatOption = document.getElementById('format-option');
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
+    const resultModal = document.getElementById('result-modal');
+    const resultImg = document.getElementById('result-img');
 
     let baseImage = null;
     let slots = Array(5).fill(null).map((_, i) => ({ id: i + 1, img: null, active: false }));
@@ -235,7 +267,6 @@
     window.addEventListener('touchmove', moveDrag, { passive: true });
     window.addEventListener('touchend', endDrag);
 
-    // PCのマウスホイールによるズーム対応
     canvas.addEventListener('wheel', (e) => {
       if (!baseImage) return;
       e.preventDefault();
@@ -410,6 +441,13 @@
       
       try {
         const dataUrl = exportCanvas.toDataURL(format, quality);
+        
+        // 画面下に表示して長押し保存させる
+        resultImg.src = dataUrl;
+        resultModal.style.display = 'block';
+        resultModal.scrollIntoView({ behavior: 'smooth' });
+
+        // 自動ダウンロードも平行して試行
         const link = document.createElement('a');
         link.download = `framed_image.${format === 'image/jpeg' ? 'jpg' : 'png'}`;
         link.href = dataUrl;
